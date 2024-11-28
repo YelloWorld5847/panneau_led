@@ -1,0 +1,224 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 20px;
+    background-color: #0c002b; /* Fond sombre */
+    color: #ffffff; /* Texte clair pour contraster */
+}
+
+h1 {
+    text-align: center;
+}
+
+form {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 2px solid #003fba;
+    background: rgba(255, 255, 255, 0.1); /* Fond translucide */
+    color: #ffffff; /* Texte clair pour la lisibilité */
+    box-shadow: 0 12px 30px rgba(50, 50, 140, 0.5); /* Accentuer l'ombre */
+    border-radius: 10px;
+
+    box-sizing: border-box;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+
+
+input, select {
+    background: rgba(90, 120, 240, 0.35);
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #8a97e6;
+    border-radius: 5px;
+    box-sizing: border-box;
+    color: #ffffff; /* Texte clair dans les inputs */
+}
+
+
+/* État focus sur les input et select */
+input:focus, select:focus {
+    background: rgba(90, 120, 240, 0.5); /* Légèrement plus intense au focus */
+    color: #ffffff; /* Le texte reste blanc au focus */
+    outline: none; /* Enlever le contour par défaut */
+    box-shadow: 0 0 8px rgba(23, 121, 255, 0.8); /* Effet lumineux autour du champ */
+}
+
+select:focus {
+    background: rgba(64,73,153,255);
+}
+
+/* Style des options du select */
+select option {
+    background: rgba(90, 120, 240, 0.3); /* Fond des options, similaire à l'input */
+    color: #ffffff; /* Texte clair dans les options */
+}
+
+/* Style de l'option survolée */
+select option:hover {
+    background: rgba(23, 121, 255, 0.5); /* Fond légèrement plus clair au survol */
+}
+
+/* Style de l'option sélectionnée */
+/*select option:checked {
+    background: #6575d8;/*rgba(23, 121, 255, 0.7); /* Fond plus clair lorsque sélectionné
+}*/
+
+
+input[type="color"] {
+
+    padding: 0; /* Enlève le padding par défaut pour les inputs color */
+    border-radius: 5px; /* Coin arrondi */
+}
+
+
+.upload-container {
+    background: rgba(90, 120, 240, 0.5);
+    /*background: #00abff;*/
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.custom-file-input {
+    display: none;
+}
+
+.custom-file-label {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #6a08de; /* Couleur de fond personnalisée */
+    border: 2px solid #ad81e0;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    box-sizing: border-box;
+    box-shadow: 0 0 8px rgba(129, 45, 226, 0.8);
+}
+
+.custom-file-label:hover {
+    background-color: #590ab6; /* Bleu plus intense au survol */
+}
+
+
+
+/* Style du bouton "Envoyer" */
+button {
+    position: relative;
+    width: 100%; /* Adapte à la largeur du formulaire */
+    background: none;
+    color: #1670f0;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    padding: 15px 30px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .2);
+    overflow: hidden;
+}
+
+button:before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    bottom: 2px;
+    width: 50%;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+button span:nth-child(1) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #0c002b, #1779ff);
+    animation: animate1 2s linear infinite;
+}
+
+@keyframes animate1 {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+button span:nth-child(2) {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, #0c002b, #1779ff);
+    animation: animate2 2s linear infinite;
+    animation-delay: 1s;
+}
+
+@keyframes animate2 {
+    0% {
+        transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(100%);
+    }
+}
+
+button span:nth-child(3) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to left, #0c002b, #1779ff);
+    animation: animate3 2s linear infinite;
+}
+
+@keyframes animate3 {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+button span:nth-child(4) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to top, #0c002b, #1779ff);
+    animation: animate4 2s linear infinite;
+    animation-delay: 1s;
+}
+
+@keyframes animate4 {
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+/* Ajustement de l'effet au survol */
+button:hover {
+    background: rgba(22, 112, 240, 0.1);
+    color: #1768dc;
+}
