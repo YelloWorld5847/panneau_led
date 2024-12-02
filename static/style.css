@@ -245,7 +245,7 @@ button:hover {
 }
 
 .btn-gallery:hover {
-    background-color: #0e4fb0;
+    background-color: #590ab6; /* Bleu plus intense au survol */
 }
 
 
@@ -264,7 +264,9 @@ button:hover {
     box-shadow: 0 12px 30px rgba(50, 50, 140, 0.5);
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+
 }
+
 
 /* Effet au survol */
 .gallery img:hover {

@@ -14,11 +14,27 @@
             <img
                 src="{{ url_for('static', filename=image.split('static/')[1]) }}"
                 alt="Image"
-                onclick="selectImage('{{ image }}')"> <!-- Utiliser selectImage ici -->
+                class="gallery-image"
+                onclick="selectImage('{{ image }}')"
+                style="opacity: 0;"> <!-- Commence avec l'image cachée -->
         {% endfor %}
     </div>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const images = document.querySelectorAll('.gallery-image');
+            let delay = 0; // Temps initial en millisecondes
+
+            images.forEach((image, index) => {
+                setTimeout(() => {
+                    image.style.transition = 'opacity 0.5s'; // Animation douce
+                    image.style.opacity = '1'; // Affiche l'image
+                }, delay);
+
+                delay += 50; // Augmente le délai pour la prochaine image (500ms ici)
+            });
+        });
+
         function selectImage(imagePath) {
             console.log("Image clicked:", imagePath); // Vérifie si l'événement est déclenché
             window.location.href = `/?selected_image=${encodeURIComponent(imagePath)}`;
