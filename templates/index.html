@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <a href="{{ url_for('gallery') }}" style="display: block; text-align: center; margin-top: 20px; color: #1670f0; text-decoration: none;">Voir la galerie d'images</a>
+
     <title>Panneau LED</title>
 </head>
 <body>
@@ -11,24 +13,33 @@
     <form method="POST" enctype="multipart/form-data">
         <label for="content_type">Choisissez ce que vous voulez afficher :</label>
         <select name="content_type" id="content_type" onchange="toggleFields()">
-            <option value="text">Texte</option>
-            <option value="image">Image</option>
+            <option value="text" {% if content_type == "text" %}selected{% endif %}>Texte</option>
+            <option value="image" {% if content_type == "image" %}selected{% endif %}>Image</option>
         </select>
 
-        <div id="text-options" class="options">
+        <!-- Champ caché pour conserver le type de contenu -->
+        <input type="hidden" name="content_type" id="hidden_content_type" value="{{ content_type }}">
+
+        <!-- Champ caché pour stocker le chemin de l'image -->
+        <input type="hidden" name="selected_image" id="selected_image" value="">
+
+
+        <div id="text-options" class="options" style="{% if content_type == 'text' %}display:block{% else %}display:none{% endif %}">
             <label for="text">Texte :</label>
             <input type="text" name="text" id="text">
             <label for="color">Couleur :</label>
             <input type="color" name="color" id="color" value="#ff4444">
         </div>
 
-        <div id="image-options" class="options" style="display:none;">
+        <div id="image-options" class="options" style="{% if content_type == 'image' %}display:block{% else %}display:none{% endif %}">
             <label for="image">Image :</label>
             <div class="upload-container">
                 <input type="file" name="image" id="image" class="custom-file-input">
                 <label for="image" class="custom-file-label">Cliquez pour choisir une image...</label>
             </div>
+            <a href="{{ url_for('gallery') }}" class="btn-gallery">Sélectionner depuis la galerie</a>
         </div>
+
 
         <button type="submit">
             Envoyer
@@ -42,10 +53,28 @@
     </form>
 
     <script>
+        function selectImage(imagePath) {
+            // Mettre à jour le champ caché avec le chemin de l'image sélectionnée
+            document.getElementById('selected_image').value = imagePath;
+        }
         function toggleFields() {
             const contentType = document.getElementById("content_type").value;
             document.getElementById("text-options").style.display = contentType === "text" ? "block" : "none";
             document.getElementById("image-options").style.display = contentType === "image" ? "block" : "none";
+            // Mettre à jour le champ caché pour garantir que l'état reste correct
+            document.getElementById("hidden_content_type").value = contentType;
+        }
+
+        // Mettre à jour la sélection au chargement si on vient de la galerie
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedImage = urlParams.get('selected_image');
+            if (selectedImage) {
+                document.getElementById('content_type').value = 'image';  // Sélectionner l'option image
+                document.getElementById('hidden_content_type').value = 'image';  // Mettre à jour le champ caché
+                document.getElementById('selected_image').value = selectedImage;
+                toggleFields();  // S'assurer que l'affichage soit correct
+            }
         }
     </script>
 </body>

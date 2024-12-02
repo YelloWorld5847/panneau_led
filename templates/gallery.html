@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Galerie d'Images</title>
+
+</head>
+<body>
+    <h1>Galerie d'Images</h1>
+    <div class="gallery">
+        {% for image in images %}
+            <img
+                src="{{ url_for('static', filename=image.split('static/')[1]) }}"
+                alt="Image"
+                onclick="selectImage('{{ image }}')"> <!-- Utiliser selectImage ici -->
+        {% endfor %}
+    </div>
+
+    <script>
+        function selectImage(imagePath) {
+            console.log("Image clicked:", imagePath); // Vérifie si l'événement est déclenché
+            window.location.href = `/?selected_image=${encodeURIComponent(imagePath)}`;
+        }
+    </script>
+
+</body>
+</html>

@@ -222,3 +222,53 @@ button:hover {
     background: rgba(22, 112, 240, 0.1);
     color: #1768dc;
 }
+
+
+.btn-gallery {
+    display: block;
+    font-weight: bold;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #6a08de;
+    border: 2px solid #ad81e0;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+    box-shadow: 0 0 8px rgba(129, 45, 226, 0.8);
+    transition: background-color 0.3s;
+
+}
+
+.btn-gallery:hover {
+    background-color: #0e4fb0;
+}
+
+
+/* Image */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+.gallery img {
+    max-width: 200px;
+    max-height: 200px;
+    border: 3px solid #003fba;
+    border-radius: 10px;
+    box-shadow: 0 12px 30px rgba(50, 50, 140, 0.5);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Effet au survol */
+.gallery img:hover {
+    transform: scale(1.1); /* Agrandit légèrement l'image */
+    box-shadow: 0 20px 50px rgba(50, 50, 140, 0.7); /* Ombre plus intense */
+    border-color: #ffffff; /* Change la couleur de la bordure */
+}
