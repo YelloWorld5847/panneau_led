@@ -35,8 +35,15 @@ def index():
             selected_image = request.form.get('selected_image')
             if selected_image:
                 print(f"Image sent from gallery: {selected_image}")
+
+                # Vérifier si l'image sélectionnée est un fichier GIF
+                if selected_image.lower().endswith('.gif'):
+                    # Commande spécifique pour afficher un GIF
+                    print(f"GIF file detected: {selected_image}")
+                    command = f"cd /home/pi/rpi-rgb-led-matrix/utils && make && sudo ./led-image-viewer {selected_image} --led-cols 64 --led-rows 64"
+                else:
+                    command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py {selected_image} --led-cols 64 --led-rows 64"
                 # Commande pour envoyer l'image sélectionnée au panneau LED
-                command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py {selected_image} --led-cols 64 --led-rows 64"
                 run_led_command(command)
             elif 'image' in request.files:
                 file = request.files['image']
@@ -49,8 +56,15 @@ def index():
                     else:
                         file.save(filepath)
                         print(f"Image sauvegardée à: {filepath}")
+
+                    # Vérifier si l'image sélectionnée est un fichier GIF
+                    if filename.lower().endswith('.gif'):
+                        # Commande spécifique pour afficher un GIF
+                        print(f"GIF file detected: {filename}")
+                        command = f"cd /home/pi/rpi-rgb-led-matrix/utils && make && sudo ./led-image-viewer {filepath} --led-cols 64 --led-rows 64"
+                    else:
+                        command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py {filepath} --led-cols 64 --led-rows 64"
                     # Commande pour envoyer l'image téléchargée au panneau LED
-                    command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py {filepath} --led-cols 64 --led-rows 64"
                     run_led_command(command)
 
 
