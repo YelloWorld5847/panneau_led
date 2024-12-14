@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import os
+import subprocess
 
 app = Flask(__name__)
 
@@ -7,6 +8,13 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'static/uploads/'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+def run_led_command(command):
+    """Exécute une commande pour le panneau LED."""
+    try:
+        result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print(result.stdout.decode())  # Affiche la sortie
+    except subprocess.CalledProcessError as e:
+        print(f"Erreur lors de l'exécution de la commande : {e.stderr.decode()}")
 
 # Route principale
 @app.route("/", methods=["GET", "POST"])
@@ -19,13 +27,17 @@ def index():
             text = request.form.get("text")
             color = request.form.get("color")
             print(f"Text to display: {text} with color: {color}")
-            # Commande pour envoyer le texte au panneau LED
+            # Commande pour afficher le texte sur le panneau LED
+            command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./runtext.py --led-cols 64 --led-rows 64 -t \"{text}\""
+            run_led_command(command)
         elif content_type == "image":
             # Vérification si une image a été téléchargée ou sélectionnée depuis la galerie
             selected_image = request.form.get('selected_image')
             if selected_image:
                 print(f"Image sent from gallery: {selected_image}")
                 # Commande pour envoyer l'image sélectionnée au panneau LED
+                command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py {selected_image} --led-cols 64 --led-rows 64"
+                run_led_command(command)
             elif 'image' in request.files:
                 file = request.files['image']
                 if file.filename:
@@ -38,6 +50,8 @@ def index():
                         file.save(filepath)
                         print(f"Image sauvegardée à: {filepath}")
                     # Commande pour envoyer l'image téléchargée au panneau LED
+                    command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py {filepath} --led-cols 64 --led-rows 64"
+                    run_led_command(command)
 
 
         return redirect(url_for("index"))
