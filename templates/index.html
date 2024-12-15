@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <a href="{{ url_for('gallery') }}" style="display: block; text-align: center; margin-top: 20px; color: #1670f0; text-decoration: none;">Voir la galerie d'images</a>
+<!--    <a href="{{ url_for('gallery') }}" style="display: block; text-align: center; margin-top: 20px; color: #1670f0; text-decoration: none;">Voir la galerie d'images</a>-->
 
     <title>Panneau LED</title>
 </head>
 <body>
     <h1>Configurer le panneau LED</h1>
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" class="main-form">
         <label for="content_type">Choisissez ce que vous voulez afficher :</label>
         <select name="content_type" id="content_type" onchange="toggleFields()">
             <option value="text" {% if content_type == "text" %}selected{% endif %}>Texte</option>
@@ -40,6 +40,8 @@
             <a href="{{ url_for('gallery') }}" class="btn-gallery">Sélectionner depuis la galerie</a>
         </div>
 
+        <!-- Champ caché pour l'action (envoyer ou arrêter) -->
+        <input type="hidden" name="action" id="action" value="send">
 
         <button type="submit">
             Envoyer
@@ -49,8 +51,15 @@
             <span></span>
         </button>
 
+        <!-- Bouton Stop qui change l'action en "stop" -->
+        <button type="submit" class="btn btn-danger" onclick="document.getElementById('action').value='stop'">
+            Stop LED Display
+        </button>
 <!--        <button type="submit">Envoyer</button>-->
     </form>
+
+    <a href="{{ url_for('manage_gallery') }}" style="display: block; text-align: center; margin-top: 20px; color: #1670f0; text-decoration: none;">Gérer la galerie d'images</a>
+
 
     <script>
         function selectImage(imagePath) {

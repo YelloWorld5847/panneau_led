@@ -30,6 +30,7 @@ image.thumbnail((matrix.width, matrix.height), Image.ANTIALIAS)
 
 matrix.SetImage(image.convert('RGB'))
 
+
 try:
     print("Press CTRL-C to stop.")
     while True:

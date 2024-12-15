@@ -11,33 +11,73 @@
     <h1>Galerie d'Images</h1>
     <div class="gallery">
         {% for image in images %}
-            <img
-                src="{{ url_for('static', filename=image.split('static/')[1]) }}"
-                alt="Image"
-                class="gallery-image"
-                onclick="selectImage('{{ image }}')"
-                style="opacity: 0;"> <!-- Commence avec l'image cachée -->
+            <div class="gallery-item">
+                <img
+                    src="{{ url_for('static', filename=image.split('static/')[1]) }}"
+                    alt="Image"
+                    class="gallery-image imgHover"
+                    onclick="selectImage('{{ image }}')"
+                    style="opacity: 0;"
+                    onmouseover="setOpacity(this, 0)"
+                    onmouseleave="setOpacity(this, 0.7)">
+
+                <!-- Bouton de suppression dans le conteneur de l'image -->
+                <form method="POST" action="{{ url_for('manage_gallery') }}" class="delete-form" style="opacity: 0;">
+                    <input type="hidden" name="image_to_delete" value="{{ image }}">
+                    <button type="submit" class="delete-button delHover">Supprimer</button>
+                </form>
+            </div>
+
         {% endfor %}
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const images = document.querySelectorAll('.gallery-image');
+            const deleteForms = document.querySelectorAll('.delete-form');
             let delay = 0; // Temps initial en millisecondes
 
             images.forEach((image, index) => {
                 setTimeout(() => {
-                    image.style.transition = 'opacity 0.5s'; // Animation douce
                     image.style.opacity = '1'; // Affiche l'image
                 }, delay);
 
-                delay += 50; // Augmente le délai pour la prochaine image (500ms ici)
+                delay += 70; // Augmente le délai pour la prochaine image (100ms ici)
+            });
+
+            // Réinitialiser le délai pour synchroniser les boutons avec les images
+            delay = 0;
+
+            deleteForms.forEach((form, index) => {
+                setTimeout(() => {
+                    form.style.opacity = '1'; // Affiche le bouton "Supprimer"
+                }, delay);
+
+                delay += 70; // Augmente le délai pour le prochain bouton
             });
         });
 
         function selectImage(imagePath) {
             console.log("Image clicked:", imagePath); // Vérifie si l'événement est déclenché
             window.location.href = `/?selected_image=${encodeURIComponent(imagePath)}`;
+        }
+
+
+
+        function classToId(className, idName) {
+            const tabName = document.getElementsByClassName(className);
+            for (let i = 0; i < tabName.length; i++) {
+                tabName[i].id = idName + (i+1);
+            }
+        }
+        classToId("imgHover", "idHover")
+        classToId("delHover", "delIdHover")
+
+        function setOpacity(img, opacity) {
+            const i = img.id.slice(7);
+            const delId = "delIdHover"  + i;
+            const delElement = document.getElementById(delId);
+            delElement.style.opacity = opacity;
         }
     </script>
 

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Gérer la Galerie</title>
+</head>
+<body>
+    <h1>Gérer la Galerie d'Images</h1>
+    <div class="gallery">
+        {% for image in images %}
+            <div class="gallery-item">
+                <img
+                    src="{{ url_for('static', filename=image.split('static/')[1]) }}"
+                    alt="Image"
+                    class="gallery-image imgHover"
+                    style="opacity: 1;"
+                    onmouseover="setOpacity(this, 0)"
+                    onmouseleave="setOpacity(this, 0.7)"
+                >
+
+                <!-- Bouton de suppression dans le conteneur de l'image -->
+                <form method="POST" action="{{ url_for('manage_gallery') }}" class="delete-form">
+                    <input type="hidden" name="image_to_delete" value="{{ image }}">
+                    <button type="submit" class="delete-button delHover">Supprimer</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+    <a href="{{ url_for('index') }}">Retour à la page principale</a>
+
+
+    <script>
+        function classToId(className, idName) {
+            const tabName = document.getElementsByClassName(className);
+            for (let i = 0; i < tabName.length; i++) {
+                tabName[i].id = idName + (i+1);
+            }
+        }
+        classToId("imgHover", "idHover")
+        classToId("delHover", "delIdHover")
+
+        function setOpacity(img, opacity) {
+            const i = img.id.slice(7);
+            const delId = "delIdHover" + i;
+            const delElement = document.getElementById(delId);
+            delElement.style.opacity = opacity;
+        }
+    </script>
+</body>
+</html>
