@@ -134,7 +134,7 @@ def index():
                     command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py ~/projects/panneau_led/{filepath} --led-cols 64 --led-rows 64"
                 # Commande pour envoyer l'image téléchargée au panneau LED
                 print("commande : ", command)
-                # run_led_command(command)
+                run_led_command(command)
 
             elif selected_image:
                 print(f"Image sent from gallery: {selected_image}")
@@ -150,7 +150,7 @@ def index():
                     command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py ~/projects/panneau_led/{selected_image} --led-cols 64 --led-rows 64"
                 # Commande pour envoyer l'image sélectionnée au panneau LED
                 print("commande : ", command)
-                # run_led_command(command)
+                run_led_command(command)
             else:
                 print("Aucune image sélectionnée ou téléversée.")
             # elif 'image' in request.files:
