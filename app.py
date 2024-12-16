@@ -74,7 +74,6 @@ def index():
         action = request.form.get("action")
         print("action = ", action)
         if action == "stop":
-            print(1)
             # Si l'action est "stop", on arrête le panneau LED
             # Arrêter les programmes en cours avant d'afficher un nouveau texte
             create_stop_file()
@@ -82,8 +81,6 @@ def index():
             remove_stop_file()  # Supprime le fichier de contrôle avant de lancer un nouveau script
 
             return redirect(url_for("index"))
-        else:
-            print(2)
 
         content_type = request.form.get("content_type")
 
@@ -105,8 +102,41 @@ def index():
             run_led_command(command)
         elif content_type == "image":
             # Vérification si une image a été téléchargée ou sélectionnée depuis la galerie
-            selected_image = request.form.get('selected_image')
-            if selected_image:
+            # selected_image = request.form.get('selected_image')
+            # print(f"selected image : {selected_image}")
+            # print(f"request.files : {request.files}")
+            # Téléversement d'une nouvelle image ou sélection dans la galerie
+            selected_image = request.form.get("selected_image")  # Galerie
+            uploaded_file = request.files.get("image")  # Téléversée
+            print(f"selected image : {selected_image}")
+            print(f"uploaded_file : {uploaded_file} name : {uploaded_file.filename}")
+
+            if uploaded_file and uploaded_file.filename:
+                # file = request.files['image']
+                # if file.filename:
+                filename = uploaded_file.filename
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], uploaded_file.filename)
+                # Vérifier si le fichier existe déjà dans le dossier
+                if os.path.exists(filepath):
+                    print(f"L'image {filename} existe déjà dans le dossier.")
+                else:
+                    uploaded_file.save(filepath)
+                    print(f"Image sauvegardée à: {filepath}")
+
+                # Vérifier si l'image sélectionnée est un fichier GIF
+                if filename.lower().endswith('.gif'):
+                    # Commande spécifique pour afficher un GIF
+                    print(f"GIF file detected: {filename}")
+                    # current_process = "/home/pi/rpi-rgb-led-matrix/utils/led-image-viewer"
+                    command = f"cd /home/pi/rpi-rgb-led-matrix/utils && make && sudo ./led-image-viewer ~/projects/panneau_led/{filepath} --led-cols 64 --led-rows 64"
+                else:
+                    # current_process = "~/rpi-rgb-led-matrix/bindings/python/samples/image-viewer.py"
+                    command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py ~/projects/panneau_led/{filepath} --led-cols 64 --led-rows 64"
+                # Commande pour envoyer l'image téléchargée au panneau LED
+                print("commande : ", command)
+                # run_led_command(command)
+
+            elif selected_image:
                 print(f"Image sent from gallery: {selected_image}")
 
                 # Vérifier si l'image sélectionnée est un fichier GIF
@@ -114,35 +144,38 @@ def index():
                     # Commande spécifique pour afficher un GIF
                     print(f"GIF file detected: {selected_image}")
                     # current_process = "/home/pi/rpi-rgb-led-matrix/utils/led-image-viewer"
-                    command = f"cd /home/pi/rpi-rgb-led-matrix/utils && make && sudo ./led-image-viewer {selected_image} --led-cols 64 --led-rows 64"
+                    command = f"cd /home/pi/rpi-rgb-led-matrix/utils && make && sudo ./led-image-viewer ~/projects/panneau_led/{selected_image} --led-cols 64 --led-rows 64"
                 else:
                     # current_process = "~/rpi-rgb-led-matrix/bindings/python/samples/image-viewer.py"
-                    command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py {selected_image} --led-cols 64 --led-rows 64"
+                    command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py ~/projects/panneau_led/{selected_image} --led-cols 64 --led-rows 64"
                 # Commande pour envoyer l'image sélectionnée au panneau LED
-                run_led_command(command)
-            elif 'image' in request.files:
-                file = request.files['image']
-                if file.filename:
-                    filename = file.filename
-                    filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
-                    # Vérifier si le fichier existe déjà dans le dossier
-                    if os.path.exists(filepath):
-                        print(f"L'image {filename} existe déjà dans le dossier.")
-                    else:
-                        file.save(filepath)
-                        print(f"Image sauvegardée à: {filepath}")
-
-                    # Vérifier si l'image sélectionnée est un fichier GIF
-                    if filename.lower().endswith('.gif'):
-                        # Commande spécifique pour afficher un GIF
-                        print(f"GIF file detected: {filename}")
-                        # current_process = "/home/pi/rpi-rgb-led-matrix/utils/led-image-viewer"
-                        command = f"cd /home/pi/rpi-rgb-led-matrix/utils && make && sudo ./led-image-viewer {filepath} --led-cols 64 --led-rows 64"
-                    else:
-                        # current_process = "~/rpi-rgb-led-matrix/bindings/python/samples/image-viewer.py"
-                        command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py {filepath} --led-cols 64 --led-rows 64"
-                    # Commande pour envoyer l'image téléchargée au panneau LED
-                    run_led_command(command)
+                print("commande : ", command)
+                # run_led_command(command)
+            else:
+                print("Aucune image sélectionnée ou téléversée.")
+            # elif 'image' in request.files:
+                # file = request.files['image']
+                # if file.filename:
+                #     filename = file.filename
+                #     filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+                #     # Vérifier si le fichier existe déjà dans le dossier
+                #     if os.path.exists(filepath):
+                #         print(f"L'image {filename} existe déjà dans le dossier.")
+                #     else:
+                #         file.save(filepath)
+                #         print(f"Image sauvegardée à: {filepath}")
+                #
+                #     # Vérifier si l'image sélectionnée est un fichier GIF
+                #     if filename.lower().endswith('.gif'):
+                #         # Commande spécifique pour afficher un GIF
+                #         print(f"GIF file detected: {filename}")
+                #         # current_process = "/home/pi/rpi-rgb-led-matrix/utils/led-image-viewer"
+                #         command = f"cd /home/pi/rpi-rgb-led-matrix/utils && make && sudo ./led-image-viewer ~/projects/panneau_led/{filepath} --led-cols 64 --led-rows 64"
+                #     else:
+                #         # current_process = "~/rpi-rgb-led-matrix/bindings/python/samples/image-viewer.py"
+                #         command = f"cd ~/rpi-rgb-led-matrix/bindings/python/samples && sudo ./image-viewer.py ~/projects/panneau_led/{filepath} --led-cols 64 --led-rows 64"
+                #     # Commande pour envoyer l'image téléchargée au panneau LED
+                #     run_led_command(command)
 
 
         return redirect(url_for("index"))
@@ -168,8 +201,10 @@ def gallery():
     images = [
         f"static/uploads/{filename}"
         for filename in os.listdir(app.config['UPLOAD_FOLDER'])
-        if filename.lower().endswith(('.bmp', '.dib', '.gif', '.im', '.jpeg', '.jpg', '.jp2', '.pcx', '.png', '.ppm', '.tiff', '.webp', '.heif', '.heic'))
-    ]
+        if filename.lower().endswith(('.blp', '.bmp', '.dib', '.bufr', '.cur', '.pcx', '.dcx', '.dds', '.ps', '.eps', '.fit', '.fits', '.fli', '.flc',
+                                      '.fpx', '.ftc', '.ftu', '.gbr', '.gif', '.grib', '.h5', '.hdf', '.icns', '.ico', '.im', '.j2k', '.jp2', '.j2c',
+                                      '.jfif', '.jpe', '.jpeg', '.jpg', '.mpo', '.msp', '.pcd', '.pixar', '.png', '.ppm', '.pbm', '.pgm', '.pnm',
+                                      '.psd', '.sgi', '.ras', '.tga', '.tiff', '.tif', '.webp', '.wmf', '.xbm', '.xpm'))]
 
     # Si une image doit être supprimée
     if request.method == "POST":

@@ -22,7 +22,7 @@
                     onmouseleave="setOpacity(this, 0.7)">
 
                 <!-- Bouton de suppression dans le conteneur de l'image -->
-                <form method="POST" action="{{ url_for('manage_gallery') }}" class="delete-form" style="opacity: 0;">
+                <form method="POST" action="{{ url_for('gallery') }}" class="delete-form" style="opacity: 0;">
                     <input type="hidden" name="image_to_delete" value="{{ image }}">
                     <button type="submit" class="delete-button delHover">Supprimer</button>
                 </form>

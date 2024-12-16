@@ -34,7 +34,11 @@
         <div id="image-options" class="options" style="{% if content_type == 'image' %}display:block{% else %}display:none{% endif %}">
             <label for="image">Image :</label>
             <div class="upload-container">
-                <input type="file" name="image" id="image" class="custom-file-input">
+                <input type="file" name="image" id="image" class="custom-file-input"
+                accept=".blp, .bmp, .dib, .bufr, .cur, .pcx, .dcx, .dds, .ps, .eps, .fit, .fits, .fli, .flc,
+                .fpx, .ftc, .ftu, .gbr, .gif, .grib, .h5, .hdf, .icns, .ico, .im, .j2k, .jp2, .j2c,
+                .jfif, .jpe, .jpeg, .jpg, .mpo, .msp, .pcd, .pixar, .png, .ppm, .pbm, .pgm, .pnm,
+                .psd, .sgi, .ras, .tga, .tiff, .tif, .webp, .wmf, .xbm, .xpm">
                 <label for="image" class="custom-file-label">Cliquez pour choisir une image...</label>
             </div>
             <a href="{{ url_for('gallery') }}" class="btn-gallery">Sélectionner depuis la galerie</a>
